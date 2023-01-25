@@ -12,6 +12,7 @@ require('./models/Postagem')
 const Postagem = mongoose.model('postagens')
 require('./models/Categoria')
 const Categoria = mongoose.model('categorias')
+const usuarios = require('./routes/usuario')
 
 // Configs
     // Sessão
@@ -107,7 +108,7 @@ const Categoria = mongoose.model('categorias')
             })
         })
 
-
+        app.use('/usuarios', usuarios)
 
         app.get('/404', (req, res) => {
             res.send('Erro 404!')
