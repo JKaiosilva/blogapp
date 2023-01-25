@@ -14,6 +14,8 @@ router.get('/posts', (req, res) => {
     res.send('Página de posts')
 })
 
+
+ // Rota de Categorias
 router.get('/categorias', (req, res) => {
     Categoria.find().sort({date: 'desc'}).then((categorias) => {
         res.render('admin/categorias', {categorias: categorias.map(Categoria => Categoria.toJSON())})
@@ -24,6 +26,7 @@ router.get('/categorias', (req, res) => {
     
 })
 
+// Rota para adicionar categorias
 
 router.get('/categorias/add', (req, res) => {
     res.render('admin/addcategorias')
@@ -61,6 +64,8 @@ router.post('/categorias/nova', (req, res) => {
 
 })
 
+// Rota para editar categorias
+
 router.get('/categorias/edit/:id', (req, res) => {
     Categoria.findOne({_id:req.params.id}).lean().then((categoria) => {
         res.render('admin/editcategorias', {categoria: categoria})
@@ -91,6 +96,8 @@ router.post('/categorias/edit', (req, res) => {
     })
 })
 
+// Rota para deletar categorias
+
 router.post('/categorias/deletar', (req, res) => {
     Categoria.deleteOne({_id: req.body.id}).then(() => {
         req.flash('success_msg', 'Categoria deletada com sucesso!')
@@ -101,6 +108,8 @@ router.post('/categorias/deletar', (req, res) => {
     })
 })
 
+// Rota para exibir postagens
+
 router.get('/postagens', (req, res) => {
     Postagem.find().lean().populate('categoria').sort({data: 'desc'}).then((postagens) => {
         res.render('admin/postagens', {postagens: postagens})
@@ -109,6 +118,8 @@ router.get('/postagens', (req, res) => {
         res.redirect('/admin')
     })
 })
+
+// Rota para adicionar postagens
 
 router.get('/postagens/add', (req, res) => {
     Categoria.find().lean().then((categorias) => {
@@ -148,6 +159,9 @@ router.post('/postagens/nova', (req, res) => {
 
 })
 
+
+// Rota para editar postagens
+
 router.get('/postagens/edit/:id', (req, res) => {
 
     Postagem.findOne({_id: req.params.id}).lean().then((postagem) => {
@@ -165,6 +179,45 @@ router.get('/postagens/edit/:id', (req, res) => {
 
 
 })
+
+
+router.post('/postagens/edit', (req, res) => {
+    Postagem.findOne({_id: req.body.id}).then((postagem) => {
+        postagem.titulo = req.body.titulo
+        postagem.slug = req.body.slug
+        postagem.descricao = req.body.descricao
+        postagem.conteudo = req.body.conteudo
+        postagem.categoria = req.body.categoria
+
+        postagem.save().then(() => {
+            req.flash('success_msg', 'Postagem editada com sucesso')
+            res.redirect('/admin/postagens')
+        }).catch((err) => {
+            console.log(err)
+            req.flash('error_msg', "Erro interno")
+            res.redirect('/admin/postagens')
+        })
+
+    }).catch((err) => {
+        console.log(err)
+        req.flash('error_msg', 'Houve um erro ao salvar a edição')
+        res.redirect('/admin/postagens')
+    })
+})
+
+// Rota para deletar postagem
+
+router.get('/postagens/deletar/:id', (req, res) => {
+    Postagem.remove({_id: req.params.id}).then(() => {
+        req.flash('success_msg', 'Postagem deletada')
+        res.redirect('/admin/postagens')
+    }).catch((err) => {
+        console.log(err)
+        req.flash('error_msg', "erro ao deletar postagem")
+        res.redirect('/admin/postagens')
+    })
+})
+
 
 
 module.exports = router
