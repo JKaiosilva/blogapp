@@ -15,6 +15,7 @@ const Categoria = mongoose.model('categorias')
 const usuarios = require('./routes/usuario')
 const passport = require('passport')
 require('./config/auth')(passport)
+const db = require('./config/db')
 
 // Configs
     // Sessão
@@ -45,7 +46,7 @@ require('./config/auth')(passport)
     // Mongoose
         mongoose.set('strictQuery', false)
         mongoose.Promise = global.Promise;
-        mongoose.connect('mongodb://0.0.0.0:27017/blogapp').then(() => {
+        mongoose.connect(db.mongoURI).then(() => {
             console.log('Conectado')
         }).catch((err) => {
             console.log('Erro ' + err)
@@ -53,7 +54,6 @@ require('./config/auth')(passport)
     // Public
         app.use(express.static(path.join(__dirname, 'public')))
         app.use((req, res, next) => {
-            console.log('Middle aqui')
             next();
         })
 
@@ -123,7 +123,7 @@ require('./config/auth')(passport)
         })
 
 // Outros
-    const PORT = 8081
+    const PORT = process.env.PORT || 8081
     app.listen(PORT, () => {
         console.log('Servidor Rodando!')
     })
