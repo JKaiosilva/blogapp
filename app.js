@@ -58,6 +58,7 @@ const db = require('./config/db')
         })
 
 // Rotas
+app.get( '/' ,(req,res)=>{ res.render('pagina_Inicial')})
         app.get('/', (req, res) => {
             Postagem.find().populate('categoria').lean().sort({data: 'desc'}).then((postagens) => {
                 res.render('index', {postagens: postagens})
