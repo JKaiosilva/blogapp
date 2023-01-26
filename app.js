@@ -22,7 +22,7 @@ const db = require('./config/db')
         app.use(session({
             secret: 'cursodenode',
             resave: true,
-            saveUnitialized: true
+            saveUninitialized: true
         }))
 
         app.use(passport.initialize())
