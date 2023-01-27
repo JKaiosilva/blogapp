@@ -8,17 +8,12 @@ const Postagem = mongoose.model('postagens')
 const {eAdmin} = require('../helpers/eAdmin')
 
 
-router.get('/', eAdmin, (req, res) => {
-    res.render('admin/index')
-})
 
-router.get('/posts', eAdmin,(req, res) => {
-    res.send('Página de posts')
-})
 
 
  // Rota de Categorias
-router.get('/categorias', eAdmin,(req, res) => {
+
+router.get('/categorias', eAdmin,(req, res) => {                                                                        // Rota para página de categorias vista somente por adms
     Categoria.find().sort({date: 'desc'}).then((categorias) => {
         res.render('admin/categorias', {categorias: categorias.map(Categoria => Categoria.toJSON())})
     }).catch((err) => {

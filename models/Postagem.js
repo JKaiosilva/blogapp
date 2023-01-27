@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const Postagem = new Schema({
-    titulo: {
+const Postagem = new Schema({                                       // Model para as postagens
+    titulo: {                                                       // Titulo da postagem
         type: String,
-        require: true
+        require: true                                               // Se é obrigado passar o titulo da postagem (true o torna obrigatório receber nome)
     },
     slug: {
         type: String,
@@ -18,7 +18,7 @@ const Postagem = new Schema({
         type: String,
         require: true
     },
-    categoria: {
+    categoria: {                                                    // Referencia para qual categoria a postagem irá pertencer
         type: Schema.Types.ObjectId,
         ref: 'categorias',
         require: true
